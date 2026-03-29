@@ -1,4 +1,4 @@
-📚 Minha Jornada com Ponteiros e Alocação Dinâmica e Vetores e Matrizes em C
+📚 Minha Jornada com Ponteiros, Alocação Dinâmica, Vetores e Matrizes e Struct e Vetores de Structs em C
 
 Bom, Se você está aqui, provavelmente está estudando C e quer entender como eu resolvi cada um desses exercícios.
 Vou mostrar o raciocínio que usei em cada questão. Espero que isso te ajude a compreender melhor os conceitos!
@@ -64,6 +64,141 @@ Mesma alocação da matriz, mas no preenchimento usei rand() % 100 + 1 para núm
 4. Armazenando nomes e idades
 O que pensei:
 Aqui precisei de duas estruturas: um vetor de ponteiros para as strings (nomes) e um vetor de inteiros (idades). Para cada pessoa, aloquei espaço para o nome com malloc e li com fgets (para pegar nomes com espaços). As idades li com scanf. No final, liberei cada string, depois os vetores. Cuidado com o \n que fica no buffer – usei getchar() para limpar.
+
+Exercício 1 – Controle de Funcionários
+A ideia aqui é simples: guardar dados de funcionários (nome, salário, identificador e cargo) numa estrutura própria, e depois fazer algumas operações básicas.
+
+a) Preencher os dados de um funcionário
+Como que a função faz:
+Ela recebe o endereço (o ponteiro) de uma estrutura Funcionario e pede para o usuário digitar cada campo. Usei fgets para ler o nome e o cargo porque eles podem ter espaços (ex: "João Silva", "Analista de Sistemas"). O scanf normal para o salário e o identificador. Como o parâmetro é um ponteiro, qualquer alteração dentro da função reflete direto na estrutura original – não precisa retornar nada.
+
+Por que assim?
+Se passássemos a estrutura por cópia, a função não conseguiria modificar os valores originais. Usando ponteiro, economizamos memória e garantimos que os dados realmente sejam salvos.
+
+b) Imprimir os dados de um funcionário
+Como a função faz:
+Recebe o ponteiro (mas agora como const, ou seja, só leitura) e mostra cada campo na tela com uma formatação bonitinha. Usei const para garantir que a impressão não vai alterar nada por engano.
+
+c) Alterar o salário
+Como a função faz:
+É a mais simples de todas: recebe o ponteiro do funcionário e o novo salário (por parâmetro) e só faz func->salario = novoSalario. Também daria para pedir o novo valor dentro da função, mas achei mais flexível receber como argumento – assim posso usar a função tanto para um reajuste fixo quanto para um valor digitado.
+
+d) Funcionário com maior e menor salário
+O que a função faz:
+Ela recebe um vetor de funcionários e o tamanho desse vetor. A lógica é clássica:
+
+Começo supondo que o primeiro funcionário é o que tem maior salário e também o de menor salário.
+
+Percorro todo o vetor comparando os salários: se achar um maior que o atual, atualizo o índice do maior; se achar um menor, atualizo o índice do menor.
+
+No final, imprimo o cargo e o salário de cada um (apenas os extremos).
+
+Cuidado que tomei:
+Se o vetor estiver vazio (n <= 0), a função simplesmente não faz nada para evitar erros.
+
+Exercício 2 – Cadastro de Pessoas
+É bem parecido com o de funcionários, mas agora os campos são nome, número do documento e idade. As operações são análogas, com a diferença que aqui atualizamos a idade e buscamos a pessoa mais velha e a mais nova.
+
+a) Preencher uma pessoa
+Como a função faz:
+Mesma ideia do funcionário: pede nome (com fgets para aceitar espaços), número do documento e idade. Uso ponteiro para modificar a estrutura original.
+
+b) Imprimir uma pessoa
+Como que a função faz:
+Exibe os campos de forma organizada. Também uso const para segurança.
+
+c) Atualizar a idade
+O que a função faz:
+Recebe a estrutura da pessoa e a nova idade, e atualiza o campo idade. Poderia ser um scanf dentro da função, mas optei por receber o valor já pronto para a função ser mais versátil.
+
+d) Pessoa mais velha e mais nova
+O que a função faz:
+Percorre o vetor de pessoas comparando as idades. Começo com a primeira pessoa como referência de mais velha e mais nova, e vou trocando os índices sempre que encontro alguém mais velho ou mais novo. No final, mostro o nome da pessoa mais velha e o nome da mais nova.
+
+Detalhe: Se houver empate (duas pessoas com a mesma idade máxima), a função mostra a primeira que apareceu. Não tem problema, porque o enunciado não pediu critério de desempate.
+
+Exercício 3 – Gerenciamento de Turmas (com alocação dinâmica)
+Esse é mais caprichado. A ideia é controlar várias turmas, cada uma com até 3 alunos (definido pela constante MAX_VAGAS). Os alunos são alocados dinamicamente, assim como as turmas. O programa tem um menu interativo parecido com o exemplo que foi dado.
+
+a) Criar uma turma
+Como a função faz:
+
+Primeiro, verifica se já não existe uma turma com o mesmo identificador (letra A, B, etc.). Se existir, avisa e retorna NULL.
+
+Depois, aloca memória para uma nova estrutura Turma com malloc.
+
+Inicializa o campo vagas com MAX_VAGAS (por exemplo, 3) e o id com a letra digitada.
+
+Por fim, coloca NULL em todas as posições do vetor alunos – isso é importante para saber quais posições estão livres depois.
+
+Retorna o ponteiro para a turma criada.
+
+Por que usar NULL?
+Mais tarde, quando formos matricular, vamos procurar a primeira posição com NULL para colocar o novo aluno. É um jeito simples de controlar vagas.
+
+b) Matricular um aluno
+Como que a função faz:
+
+Recebe a turma, a matrícula e o nome do aluno.
+
+Verifica se ainda há vagas (turma->vagas > 0).
+
+Procura a primeira posição do vetor alunos que esteja com NULL.
+
+Aloca um novo Aluno com malloc, preenche os dados (matrícula, nome, e as três notas com zero).
+
+Coloca o ponteiro desse novo aluno na posição encontrada.
+
+Diminui o contador de vagas da turma.
+
+Observação importante:
+As notas começam zeradas, exatamente como o enunciado pede. Só depois o professor vai lançar as notas de verdade.
+
+c) Lançar notas e calcular média
+O que a função faz:
+
+Descobre quantos alunos estão matriculados (MAX_VAGAS - turma->vagas).
+
+Percorre o vetor alunos e, para cada aluno que não for NULL, pede as três notas (usando scanf).
+
+Imediatamente calcula a média (soma das três dividido por 3) e guarda no campo media do aluno.
+
+Por que calcular na hora?
+Porque depois, quando listarmos os alunos, já teremos a média pronta para mostrar.
+
+d) Imprimir os dados dos alunos de uma turma
+Como a função faz:
+Percorre o vetor alunos da turma e, para cada posição que não for NULL, mostra matrícula, nome e média. Se a turma não tiver alunos, avisa.
+
+e) Imprimir todas as turmas
+O que a função faz:
+Recebe o vetor global turmas (um vetor de ponteiros) e a quantidade de turmas criadas (n). Para cada turma, exibe o identificador e quantas vagas ainda estão disponíveis. Se não houver nenhuma turma, avisa o usuário.
+
+f) Procurar uma turma pelo identificador
+Como que a função faz:
+Recebe o vetor de turmas, a quantidade e um caractere id. Percorre o vetor comparando turmas[i]->id com o id procurado. Se achar, retorna o ponteiro da turma; se não achar, retorna NULL. Essa função é muito usada no menu para localizar a turma antes de matricular, lançar notas ou listar alunos.
+
+g) O menu principal
+Como que o menu faz:
+Fica num loop do-while que só termina quando o usuário escolhe a opção 6 (Sair). Dentro do loop, mostra as opções, lê a escolha e, com um switch, chama a função correspondente.
+
+Opção 1: cria uma nova turma (verifica se ainda não atingiu MAX_TURMAS).
+
+Opção 2: lista todas as turmas.
+
+Opção 3: matricula um aluno (pede o id da turma, localiza com procura_turma, depois pede matrícula e nome).
+
+Opção 4: lança notas (procura a turma e chama lanca_notas).
+
+Opção 5: lista alunos de uma turma (procura a turma e chama imprime_alunos).
+
+Opção 6: sai do programa e libera toda a memória alocada (cada aluno e cada turma) para não deixar vazamentos.
+
+Cuidados extras que tomei:
+
+Depois de cada scanf eu coloquei um getchar() para consumir a quebra de linha, senão o fgets do nome podia pular.
+
+Usei fgets(nome, 81, stdin) para ler o nome completo (com espaços) e depois removi o \n do final com strcspn.
 
 🧩 Exercício Extra – Matriz 5×5 com índices
 Como pensei:
