@@ -203,3 +203,5 @@ Usei fgets(nome, 81, stdin) para ler o nome completo (com espaços) e depois rem
 🧩 Exercício Extra – Matriz 5×5 com índices
 Como pensei:
 Aloquei uma matriz 5×5 dinâmica. Preenchi cada posição com i*5 + j. Isso dá números de 0 a 24, que representam a ordem linear dos elementos. Imprimi e liberei a memória. Simples e direto.
+
+Tudo que utilizei aprendi com o professor Reudismam e com explicações da professora Cibely.
