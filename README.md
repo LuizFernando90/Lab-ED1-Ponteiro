@@ -3,7 +3,7 @@
 Bom, Se você está aqui, provavelmente está estudando C e quer entender como eu resolvi cada um desses exercícios.
 Vou mostrar o raciocínio que usei em cada questão. Espero que isso te ajude a compreender melhor os conceitos!
 
-🧭 Bloco 1 – Ponteiros e Aritmética de Ponteiros
+Bloco 1 – Ponteiros e Aritmética de Ponteiros
 1. O básico: ponteiro apontando para uma variável
 Como pensei:
 Precisava mostrar que um ponteiro guarda endereços. Então criei x e p. Fiz p = &x – isso significa: “p, agora você aponta para o endereço da x”. Depois imprimi tudo: o valor de x, o endereço dela, o que p contém (que é o endereço) e o valor que está nesse endereço (o conteúdo de x). Simples, mas essencial.
@@ -48,7 +48,7 @@ Coloquei um ponteiro no início (inicio) e outro no fim (fim = v + n - 1). Enqua
 Como pensei:
 Pedi o tamanho n, aloquei espaço com malloc. Verifiquei se deu certo (sempre bom!). Li os valores usando aritmética de ponteiros (vetor + i), somei tudo, calculei a média e mostrei. No final, liberei a memória com free. Alocar e liberar é tão importante quanto usar!
 
-📦 Bloco 2 – Vetores e Matrizes com Alocação Dinâmica
+Bloco 2 – Vetores e Matrizes com Alocação Dinâmica
 1. Vetor dinâmico – imprimindo ao contrário
 O que pensei:
 Aloquei o vetor com malloc, li os valores e, para exibir invertido, percorri de trás para frente. Depois liberei a memória. Fácil!
@@ -200,7 +200,7 @@ Depois de cada scanf eu coloquei um getchar() para consumir a quebra de linha, s
 
 Usei fgets(nome, 81, stdin) para ler o nome completo (com espaços) e depois removi o \n do final com strcspn.
 
-🧩 Exercício Extra – Matriz 5×5 com índices
+Exercício Extra – Matriz 5×5 com índices
 Como pensei:
 Aloquei uma matriz 5×5 dinâmica. Preenchi cada posição com i*5 + j. Isso dá números de 0 a 24, que representam a ordem linear dos elementos. Imprimi e liberei a memória. Simples e direto.
 
